@@ -17,7 +17,19 @@ type CountryList = {
   capital: string | undefined;
 };
 
-type CountryDetail = {};
+type CountryDetail = {
+  name: string;
+  nativeName: string;
+  topLevelDomain: string[];
+  population: number;
+  currencies?: { code: string; name: string; symbol: string }[];
+  region: string;
+  subregion: string;
+  languages: { name: string }[];
+  capital?: string;
+  borderCountries?: string[];
+  flags: { svg: string; png: string };
+};
 
 export const getCountries = (region?: string, name?: string) => {
   const countries: CountryList[] = data.map((country) => {
@@ -46,44 +58,16 @@ export const getCountries = (region?: string, name?: string) => {
 };
 
 export const getCountryByAlpha3Code = (alpha3Code: string) => {
-  let result;
-  const r = data.map((c) => {
-    if (c.alpha3Code === alpha3Code) {
-      result = c.name;
-    }
-  });
-
-  return result;
+  let result = data.find((c) => c.alpha3Code == alpha3Code);
+  if (!result)
+    throw new Error(`Country with alpha3Code ${alpha3Code} does not exists`);
+  return result.name;
 };
 
 export const getCountry = (name: string) => {
-  let result = {};
-  let coun = data.filter((c) => c.name.toLowerCase() === name.toLowerCase());
-  if (coun.length == 0) return null;
-  coun = coun[0];
-  const country = data.map((c) => {
-    if (c.name.toLowerCase() === name.toLowerCase()) {
-      let borderCountries = c.borders == undefined ? [] : c.borders;
-      let bc;
-      if (borderCountries.length > 0) {
-        bc = borderCountries.map((b) => {
-          return getCountryByAlpha3Code(b);
-        });
-      }
-      return (result = {
-        name: c.name,
-        nativeName: c.nativeName,
-        topLevelDomain: c.topLevelDomain,
-        population: c.population,
-        currencies: c.currencies,
-        region: c.region,
-        subRegion: c.subregion,
-        languages: c.languages,
-        capital: c.capital,
-        borderCountries: bc,
-        flags: c.flags,
-      });
-    }
-  });
-  return result;
+  const country: CountryDetail | undefined = data.find(
+    (c) => c.name.toLowerCase() == name.toLowerCase()
+  );
+  if (!country) throw new Error(`Country with name ${name} does not exists`);
+  return country;
 };
