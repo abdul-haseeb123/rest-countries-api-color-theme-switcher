@@ -10,12 +10,14 @@ const myFont = Nunito_Sans({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://benevolent-pony-af4d2b.netlify.app"),
   title: "Frontend Mentor Project",
   description: "rest countries api, frontend mentor project with dark mode",
   openGraph: {
     title: "Frontend Mentor Project",
     description: "rest countries api, frontend mentor project with dark mode",
     siteName: "REST Countries API | Frontend Mentor Project",
+    images: "/icon.png",
   },
 };
 
